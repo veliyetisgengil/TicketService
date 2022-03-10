@@ -1,0 +1,49 @@
+﻿@model TicketService.Ui.Models.ViewModel.SeferListeleViewModel
+@{
+    ViewBag.Title = "Sefer Listesi";
+    List<SelectListItem> KalkisAdi = (List<SelectListItem>)ViewData["KalkisAdi"];
+    List<SelectListItem> VarisAdi = (List<SelectListItem>)ViewData["VarisAdi"];
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Varış Noktası</h2>
+        @Html.DropDownList("KalkisAdi", selectList: KalkisAdi)
+    </div>
+    <div class="col-md-4">
+        <h2>Kalkış Noktası</h2>
+        @Html.DropDownList("VarisAdi", selectList: VarisAdi)
+    </div>
+    <div class="col-md-3">
+        <h2>Tarih</h2>
+        @Html.TextBox("Tarih","15.03.2022")
+    </div>
+    <div class="col-md-1">
+        <h2>İşlem</h2>
+        <button type="button" class="btn btn-danger" onclick="getSeferListe()"> <i class="fa fa-search"></i>Ara</button>
+    </div>
+</div>
+
+<script>
+    getSeferListe = () => {
+        console.log("sefergetisr");
+        let tarih = $('#Tarih').val();
+        let varis = $('#VarisAdi option:selected').text();
+        let kalkis = $('#KalkisAdi option:selected').text();
+
+        if (tarih == null || tarih == "" || varis == 0 || kalkis == 0) {
+            alert("Lütfen Gerekli Alanları Doldurun.");
+            return;
+        }
+
+        $.ajax({
+            url: "/Home/GetSeferList?strTarih=" + tarih + "&VarisAdi=" + varis + "&KalkisAdi=" + kalkis,
+            type: 'GET',
+            dataType: 'json', // added data type
+            success: function (res) {
+                console.log(res);
+            }
+        });
+    }
+
+</script>
